@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="scripts/bootstrap/css/bootstrap.min.css"/>
+
+	<script type="text/javascript" src="scripts/jquery/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="scripts/jquery/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="scripts/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="scripts/knockout/knockout-latest.js"></script>
+	<script type="text/javascript" src="scripts/knockout/knockout.mapping-latest.js"></script>	
+
+	<script type="text/javascript" src="scripts/main.js"></script>
+	
+	<style>
+		.spreadsheetHeader{
+			background-color:#24748C;
+			color:white;
+		}
+	</style>
+
+	<title>jsSpreadsheet</title>
+</head>
+	<body>
+		<div id="jsTable">
+		<button class="btn" data-bind="click: toggleEdit, text: editModeText"></button>
+		<span data-bind="visible: editMode">
+			<button class="btn" data-bind="click: addColumn">Add Column</button>
+			<button class="btn" data-bind="click: addRow">Add Row</button>
+		</span>	
+		<button class="btn" data-bind="click: showJson">Show Json</button>		
+		<table style="width:400px;" class="table table-bordered table-condensed">
+				    <thead>
+				    	<tr data-bind="foreach: columns">
+				        	<th class="spreadsheetHeader">				        		
+				        		<span data-bind="visible: !editing(), text: name, click: edit">&nbsp;</span>
+    							<input data-bind="visible: editing, value: name, hasfocus: editing" />
+				        		
+				        		
+				        		<span class="removeColumn" data-bind="visible: $parent.editMode, click:$parent.removeColumn">[X]</span>
+				        	</th>
+				        </tr>
+				    </thead>
+				    <tbody data-bind="foreach: rows">
+				    	<tr data-bind="foreach: $data">
+				            <td>
+				            	<!-- <span data-bind="text: $data"></span> -->
+				            	<span data-bind="visible: !$root.editMode(), text: data"></span>
+    							<input data-bind="visible: $root.editMode, value: data" />
+				            </td>
+				        </tr>
+				    </tbody>
+				</table>
+				</div>
+				<div id="jsonResult"></div>
+	</body>
+</html>
