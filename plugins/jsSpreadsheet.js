@@ -7,14 +7,14 @@ $.widget("ui.jsSpreadsheet", {
 					{name: "Column", width:"231px"}
 				],
 				rows: [					
-					[""]
+					[{data:""}]
 				]
 		}
 	},
 	
 	_create: function(){
-		var jsTableCell = function(data){
-			this.data = ko.observable(data);
+		var jsTableCell = function(rowItem){
+			this.data = ko.observable(rowItem.data);
 		    this.editing = ko.observable(false);
 		         
 		    // Behaviors
@@ -32,32 +32,46 @@ $.widget("ui.jsSpreadsheet", {
 		}
 		
 		var jsTable = function(data){
-			var self = this;
+			var self = this;			
 			self.editMode = ko.observable(false);
 			self.columns = ko.observableArray([]);			
 			self.rows = ko.observableArray([]);
 			
 			self.setWidths = function(columns){
 				$.each(columns, function(index, value){
-					console.log(index + " " + value);
 					self.columns()[index].width($(value).width());
 				});
 			};
 			
-			self.showJson = function(){
-				var unmapped = ko.mapping.toJS(self);
-				var data = {
-					columns: ko.utils.arrayMap(unmapped.columns, function(item) {
-		        		return {name : item.name, width: item.width};
+			self.onResized = function(e){  
+	    		var columns = $(e.currentTarget).find("th");
+				self.setWidths(columns);
+  			};
+			
+			self.setResizer = function(element){
+				self.$colResizable = $(element).find('table').colResizable(
+					{
+						postbackSafe	: true, 
+						onResize		: self.onResized
+					}
+				);				
+			}
+			
+			self.getData = function(){
+				return {
+					columns: ko.utils.arrayMap(self.columns(), function(item) {
+		        		return {name : item.name(), width: item.width()};
 		    		}),
-		    		rows: ko.utils.arrayMap(unmapped.rows, function(item) {
-						return ko.utils.arrayMap(item, function(cell){
-							return cell.data;
+		    		rows: ko.utils.arrayMap(self.rows(), function(item) {
+						return ko.utils.arrayMap(item(), function(cell){
+							return {value: cell.data()};
 						});
 		    		})
 				}
-				
-				console.log(JSON.stringify(data));
+			}
+			
+			self.showJson = function(){
+				console.log(JSON.stringify(self.getData()));
 			}
 			
 			ko.utils.arrayForEach(data.columns, function(tableHeader){
@@ -104,12 +118,20 @@ $.widget("ui.jsSpreadsheet", {
 				self.rows.push(newRow);
 			};
 		
-			self.addColumn = function() {
+			self.addColumn = function() {		
 				var columnName = prompt("Enter column name");
+				self.$colResizable.colResizable({disable:true});
 				self.columns.push(new jsTableHeader(columnName));
 				ko.utils.arrayForEach(self.rows(), function(tableRow) {
 			        tableRow.push(new jsTableCell(""));
 			    });
+			    
+			    self.$colResizable.colResizable(
+					{
+						postbackSafe	: true, 
+						onResize		: self.onResized
+					}
+				);
 			};
 			
 			self.removeColumn = function(column){
@@ -128,18 +150,8 @@ $.widget("ui.jsSpreadsheet", {
 		};
 		var table = new jsTable(this.options.data);
 		
-		var onSampleResized = function(e){  
-    		var columns = $(e.currentTarget).find("th");
-			table.setWidths(columns);
-  		};
-		
 		ko.applyBindingsToNode(this.element[0], {template:{name:'jsSpreadsheet-template'}}, table);
-		$(this.element).find('table').colResizable(
-			{
-				//liveDrag:true,
-				onResize:onSampleResized
-			}
-		);
+		table.setResizer(this.element);		
 	}
 }); //end widget
 }(jQuery));

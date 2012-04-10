@@ -2,13 +2,13 @@ $(function(){
 	
 	var fakedata1 = { type: "table", title: "SectionTable", 
 				columns: [
-					{name: "First Name", width:"200px"}, 
+					{name: "First Name", width:"100px"}, 
 					{name: "Last Name", width:"231px"}, 
 					{name: "Zip Code", width:"231px"}
 				],
 				rows: [					
-					["Sam", "Smith", "45218"],
-					["Tom", "Jones", "21523"],
+					[{data:"Sam"}, {data:"Smith"}, {data:"45218"}],
+					[{data:"Tom"}, {data:"Jones"}, {data:"21523"}],
 				]
 		};
 
