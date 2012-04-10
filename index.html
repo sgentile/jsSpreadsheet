@@ -21,7 +21,7 @@
 	<title>jsSpreadsheet</title>
 </head>
 	<body>
-		<div id="jsTable">
+		<div id="jsSpreadsheet1">
 		<button class="btn" data-bind="click: toggleEdit, text: editModeText"></button>
 		<span data-bind="visible: editMode">
 			<button class="btn" data-bind="click: addColumn">Add Column</button>
@@ -51,6 +51,45 @@
 				    </tbody>
 				</table>
 				</div>
+				
+				<hr/>
+				
+				
+				<div id="jsSpreadsheet2">
+		<button class="btn" data-bind="click: toggleEdit, text: editModeText"></button>
+		<span data-bind="visible: editMode">
+			<button class="btn" data-bind="click: addColumn">Add Column</button>
+			<button class="btn" data-bind="click: addRow">Add Row</button>
+		</span>	
+		<button class="btn" data-bind="click: showJson">Show Json</button>		
+		<table style="width:400px;" class="table table-bordered table-condensed">
+				    <thead>
+				    	<tr data-bind="foreach: columns">
+				        	<th class="spreadsheetHeader">				        		
+				        		<span data-bind="visible: !editing(), text: name, click: edit">&nbsp;</span>
+    							<input data-bind="visible: editing, value: name, hasfocus: editing" />
+				        		
+				        		
+				        		<span class="removeColumn" data-bind="visible: $parent.editMode, click:$parent.removeColumn">[X]</span>
+				        	</th>
+				        </tr>
+				    </thead>
+				    <tbody data-bind="foreach: rows">
+				    	<tr data-bind="foreach: $data">
+				            <td>
+				            	<!-- <span data-bind="text: $data"></span> -->
+				            	<span data-bind="visible: !$root.editMode(), text: data"></span>
+    							<input data-bind="visible: $root.editMode, value: data" />
+				            </td>
+				        </tr>
+				    </tbody>
+				</table>
+				</div>
+				
+				
+				
+				
+				
 				<div id="jsonResult"></div>
 	</body>
 </html>
