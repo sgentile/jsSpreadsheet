@@ -122,8 +122,26 @@ $.widget("ui.jsSpreadsheet", {
 		};
 		var table = new jsTable(this.options.data);
 		
+		var onSampleResized = function(e){  
+    		var columns = $(e.currentTarget).find("th");
+
+			var msg = "columns widths: ";
+
+			columns.each(function(){ msg += $(this).width() + "px; "; })
+
+			$("#tableSize1").html(msg);
+
+
+  		};
 		//jsSpreadsheet-template
 		ko.applyBindingsToNode(this.element[0], {template:{name:'jsSpreadsheet-template'}}, table);
+		$(this.element).find('table').colResizable(
+			{
+				liveDrag:true,
+				onResize:onSampleResized
+			}
+		);
+
 		//ko.applyBindings(table, this.element[0]);
 	}
 }); //end widget
