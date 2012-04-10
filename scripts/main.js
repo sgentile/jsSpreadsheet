@@ -2,7 +2,7 @@ $(function(){
 	
 	var fakedata1 = { type: "table", title: "SectionTable", 
 				columns: [
-					{name: "First Name", width:"231px"}, 
+					{name: "First Name", width:"200px"}, 
 					{name: "Last Name", width:"231px"}, 
 					{name: "Zip Code", width:"231px"}
 				],

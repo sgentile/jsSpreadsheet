@@ -37,12 +37,18 @@ $.widget("ui.jsSpreadsheet", {
 			self.columns = ko.observableArray([]);			
 			self.rows = ko.observableArray([]);
 			
+			self.setWidths = function(columns){
+				$.each(columns, function(index, value){
+					console.log(index + " " + value);
+					self.columns()[index].width($(value).width());
+				});
+			};
 			
 			self.showJson = function(){
 				var unmapped = ko.mapping.toJS(self);
 				var data = {
 					columns: ko.utils.arrayMap(unmapped.columns, function(item) {
-		        		return {name : item.name};
+		        		return {name : item.name, width: item.width};
 		    		}),
 		    		rows: ko.utils.arrayMap(unmapped.rows, function(item) {
 						return ko.utils.arrayMap(item, function(cell){
@@ -55,7 +61,7 @@ $.widget("ui.jsSpreadsheet", {
 			}
 			
 			ko.utils.arrayForEach(data.columns, function(tableHeader){
-				self.columns.push(new jsTableHeader(tableHeader.name));
+				self.columns.push(new jsTableHeader(tableHeader.name, tableHeader.width));
 			});
 			
 			ko.utils.arrayForEach(data.rows, function(tableRow){		
@@ -124,25 +130,16 @@ $.widget("ui.jsSpreadsheet", {
 		
 		var onSampleResized = function(e){  
     		var columns = $(e.currentTarget).find("th");
-
-			var msg = "columns widths: ";
-
-			columns.each(function(){ msg += $(this).width() + "px; "; })
-
-			$("#tableSize1").html(msg);
-
-
+			table.setWidths(columns);
   		};
-		//jsSpreadsheet-template
+		
 		ko.applyBindingsToNode(this.element[0], {template:{name:'jsSpreadsheet-template'}}, table);
 		$(this.element).find('table').colResizable(
 			{
-				liveDrag:true,
+				//liveDrag:true,
 				onResize:onSampleResized
 			}
 		);
-
-		//ko.applyBindings(table, this.element[0]);
 	}
 }); //end widget
 }(jQuery));

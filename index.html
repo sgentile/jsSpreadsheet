@@ -36,11 +36,11 @@
 				<button class="btn" data-bind="click: addRow">Add Row</button>
 			</span>	
 			<button class="btn" data-bind="click: showJson">Show Json</button>		
-			<table style="width:400px;" class="table table-bordered table-condensed">
+			<table style="width:600px;" class="table table-bordered table-condensed">
 			    <thead>
 			    	<tr data-bind="foreach: columns">
-			        	<th class="spreadsheetHeader">				        		
-			        		<span data-bind="visible: !editing(), text: name, click: edit">&nbsp;</span>
+			        	<th class="spreadsheetHeader" data-bind="attr: {width:width}">				        		
+			        		<span data-bind="visible: !editing(), text: name, click: edit">&nbsp;</span><span data-bind="text: width">&nbsp;</span>
 							<input data-bind="visible: editing, value: name, hasfocus: editing" />
 			        		
 			        		
