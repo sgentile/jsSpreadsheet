@@ -18,7 +18,9 @@ $.widget("ui.jsSpreadsheet", {
 		    this.editing = ko.observable(false);
 		         
 		    // Behaviors
-		    this.edit = function() { this.editing(true) }
+		    this.edit = function() { 
+		    	this.editing(true) 
+		    }
 		}
 		
 		var jsTableHeader = function(columnName, columnWidth){
@@ -34,9 +36,61 @@ $.widget("ui.jsSpreadsheet", {
 		var jsTable = function(data){
 			var self = this;			
 			self.editMode = ko.observable(false);
+			self.isTextSelected = ko.observable(false);
 			self.columns = ko.observableArray([]);			
 			self.rows = ko.observableArray([]);
 			
+			self.initialize = function(element){
+				self.$colResizable = $(element).find('table').colResizable(
+					{
+						postbackSafe	: true, 
+						onResize		: self.onResized,
+						disable			: self.editMode() ? false : true
+					}
+				);
+				
+				self.editMode.subscribe(function(newValue){
+				if(newValue){
+					self.$colResizable.colResizable(
+					{
+						postbackSafe	: true, 
+						onResize		: self.onResized
+					});
+					}else{
+						self.$colResizable.colResizable({disable:true});
+					}
+				});
+				
+				ko.utils.arrayForEach(data.columns, function(tableHeader){
+					self.columns.push(new jsTableHeader(tableHeader.name, tableHeader.width));
+				});
+			
+				ko.utils.arrayForEach(data.rows, function(tableRow){		
+					var rows = ko.utils.arrayMap(tableRow, function(item) {
+			        	return new jsTableCell(item);
+			    	});
+					
+					self.rows.push(ko.observableArray(rows));
+				});
+			}; // end initialize
+			
+			self.makeBold = function(){
+			
+			};
+			
+			self.makeItalic = function(){
+				
+			};
+			
+			self.makeLeftJustified = function(){
+				
+			};
+			
+			self.makeRightJustified = function(){
+				
+			};
+			
+					
 			self.setWidths = function(columns){
 				$.each(columns, function(index, value){
 					self.columns()[index].width($(value).width());
@@ -47,15 +101,6 @@ $.widget("ui.jsSpreadsheet", {
 	    		var columns = $(e.currentTarget).find("th");
 				self.setWidths(columns);
   			};
-			
-			self.setResizer = function(element){
-				self.$colResizable = $(element).find('table').colResizable(
-					{
-						postbackSafe	: true, 
-						onResize		: self.onResized
-					}
-				);				
-			}
 			
 			self.getData = function(){
 				return {
@@ -73,25 +118,6 @@ $.widget("ui.jsSpreadsheet", {
 			self.showJson = function(){
 				console.log(JSON.stringify(self.getData()));
 			}
-			
-			ko.utils.arrayForEach(data.columns, function(tableHeader){
-				self.columns.push(new jsTableHeader(tableHeader.name, tableHeader.width));
-			});
-			
-			ko.utils.arrayForEach(data.rows, function(tableRow){		
-				var rows = ko.utils.arrayMap(tableRow, function(item) {
-		        	return new jsTableCell(item);
-		    	});
-				
-				self.rows.push(ko.observableArray(rows));
-			});
-			
-			//$("td:first").css("font-style", "italic");
-			//$("td:first-child").css("font-style", "italic");
-			
-			// $("tr").each(function(){
-			    // $(this).find('td:first-child:eq(0)').css("font-style", "italic");
-			// });
 			
 			self.editModeText = ko.computed(function(){
 				if(self.editMode()){
@@ -113,7 +139,7 @@ $.widget("ui.jsSpreadsheet", {
 				var newRow = ko.observableArray([]);
 				for (var x =0; x < self.columns().length; x++)
 				{
-					newRow.push(new jsTableCell(""));
+					newRow.push(new jsTableCell({data:""}));
 				}
 				self.rows.push(newRow);
 			};
@@ -123,7 +149,7 @@ $.widget("ui.jsSpreadsheet", {
 				self.$colResizable.colResizable({disable:true});
 				self.columns.push(new jsTableHeader(columnName));
 				ko.utils.arrayForEach(self.rows(), function(tableRow) {
-			        tableRow.push(new jsTableCell(""));
+			        tableRow.push(new jsTableCell({data:""}));
 			    });
 			    
 			    self.$colResizable.colResizable(
@@ -149,9 +175,8 @@ $.widget("ui.jsSpreadsheet", {
 			};
 		};
 		var table = new jsTable(this.options.data);
-		
 		ko.applyBindingsToNode(this.element[0], {template:{name:'jsSpreadsheet-template'}}, table);
-		table.setResizer(this.element);		
+		table.initialize(this.element);		
 	}
 }); //end widget
 }(jQuery));

@@ -34,13 +34,17 @@
 			<span data-bind="visible: editMode">
 				<button class="btn" data-bind="click: addColumn">Add Column</button>
 				<button class="btn" data-bind="click: addRow">Add Row</button>
+				<button class="btn" data-bind="click: makeBold">Bold</button>
+				<button class="btn" data-bind="click: makeItalic">Italics</button>
+				<button class="btn" data-bind="click: makeLeftJustified">Left Justified</button>
+				<button class="btn" data-bind="click: makeRightJustified">Right Justified</button>
 			</span>	
 			<button class="btn" data-bind="click: showJson">Show Json</button>		
 			<table style="width:600px;" class="table table-bordered table-condensed">
 			    <thead>
 			    	<tr data-bind="foreach: columns">
 			        	<th class="spreadsheetHeader" data-bind="attr: {width:width}">				        		
-			        		<span data-bind="visible: !editing(), text: name, click: edit">&nbsp;</span><span data-bind="text: width">&nbsp;</span>
+			        		<span data-bind="visible: !editing(), text: name, click: edit">&nbsp;</span>
 							<input data-bind="visible: editing, value: name, hasfocus: editing" />
 			        		
 			        		
@@ -53,7 +57,7 @@
 			            <td>
 			            	<!-- <span data-bind="text: $data"></span> -->
 			            	<span data-bind="visible: !$root.editMode(), text: data"></span>
-							<input data-bind="visible: $root.editMode, value: data" />
+							<input data-bind="visible: $root.editMode, value: data, hasFocus: isSelected" />
 			            </td>
 			        </tr>
 			    </tbody>
