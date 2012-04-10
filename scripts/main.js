@@ -4,7 +4,7 @@ $.widget("ui.jsSpreadsheet", {
 	options:{
 		data : { type: "table", title: "SectionTable", 
 				columns: [
-					{name: ""}
+					{name: "Column", width:"231px"}
 				],
 				rows: [					
 					[""]
@@ -13,8 +13,6 @@ $.widget("ui.jsSpreadsheet", {
 	},
 	
 	_create: function(){
-		
-	
 		var jsTableCell = function(data){
 			this.data = ko.observable(data);
 		    this.editing = ko.observable(false);
@@ -23,8 +21,12 @@ $.widget("ui.jsSpreadsheet", {
 		    this.edit = function() { this.editing(true) }
 		}
 		
-		var jsTableHeader = function(columnName){
+		var jsTableHeader = function(columnName, columnWidth){
+			if(!columnWidth){
+				columnWidth = "231px";
+			}
 			this.name = ko.observable(columnName);
+			this.width = ko.observable(columnWidth);
 			this.editing = ko.observable(false);
 			this.edit = function(){this.editing(true)}
 		}
@@ -119,7 +121,10 @@ $.widget("ui.jsSpreadsheet", {
 			};
 		};
 		var table = new jsTable(this.options.data);
-		ko.applyBindings(table, this.element[0]);
+		
+		//jsSpreadsheet-template
+		ko.applyBindingsToNode(this.element[0], {template:{name:'jsSpreadsheet-template'}}, table);
+		//ko.applyBindings(table, this.element[0]);
 	}
 }); //end widget
 }(jQuery));
@@ -128,9 +133,9 @@ $(function(){
 	
 	var fakedata1 = { type: "table", title: "SectionTable", 
 				columns: [
-					{name: "First Name"}, 
-					{name: "Last Name"}, 
-					{name: "Zip Code"}
+					{name: "First Name", width:"231px"}, 
+					{name: "Last Name", width:"231px"}, 
+					{name: "Zip Code", width:"231px"}
 				],
 				rows: [					
 					["Sam", "Smith", "45218"],
