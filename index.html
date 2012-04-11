@@ -41,7 +41,7 @@
 				<button class="btn jsTableCellMakeTextAlignRight">Align Right</button>
 			</span>	
 			<button class="btn" data-bind="click: showJson">Show Json</button>		
-			<table style="width:600px;" class="table table-bordered table-condensed">
+			<table style="width:800px;" class="table table-bordered table-condensed">
 			    <thead>
 			    	<tr data-bind="foreach: columns">
 			        	<th class="spreadsheetHeader" data-bind="attr: {width:width}">				        		
@@ -55,9 +55,9 @@
 			    </thead>
 			    <tbody data-bind="foreach: rows">
 			    	<tr data-bind="foreach: $data">
-			            <td data-bind="style:{textAlign : textAlign()}">
+			            <td>
 			            	<!-- <span data-bind="text: $data"></span> -->
-			            	<span data-bind="visible: !$root.editMode(), text: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}"></span>
+			            	<div data-bind="visible: !$root.editMode(), text: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}"></div>
 							<input class="jsTableCell" data-bind="visible: $root.editMode, value: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}" />
 			            </td>
 			        </tr>

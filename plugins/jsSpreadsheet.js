@@ -202,7 +202,7 @@ $.widget("ui.jsSpreadsheet", {
 			if(element[0])
 			{
 				var tableCell = ko.dataFor(element[0]);
-				$element.find(".jsTableCellSelected").removeClass('jsTableCellSelected');
+				//$element.find(".jsTableCellSelected").removeClass('jsTableCellSelected');
 				return tableCell;
 			}
 			return null;
