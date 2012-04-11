@@ -7,8 +7,8 @@ $(function(){
 					{name: "Zip Code", width:"231px"}
 				],
 				rows: [					
-					[{data:"Sam"}, {data:"Smith"}, {data:"45218"}],
-					[{data:"Tom"}, {data:"Jones"}, {data:"21523"}],
+					[{data:"Sam", metadata:{bold:true}}, {data:"Smith"}, {data:"45218"}]
+					//[{data:"Tom"}, {data:"Jones"}, {data:"21523"}],
 				]
 		};
 

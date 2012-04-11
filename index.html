@@ -34,7 +34,7 @@
 			<span data-bind="visible: editMode">
 				<button class="btn" data-bind="click: addColumn">Add Column</button>
 				<button class="btn" data-bind="click: addRow">Add Row</button>
-				<button class="btn" data-bind="click: makeBold">Bold</button>
+				<button class="btn jsTableCellMakeBold">Bold</button>
 				<button class="btn" data-bind="click: makeItalic">Italics</button>
 				<button class="btn" data-bind="click: makeLeftJustified">Left Justified</button>
 				<button class="btn" data-bind="click: makeRightJustified">Right Justified</button>
@@ -56,8 +56,8 @@
 			    	<tr data-bind="foreach: $data">
 			            <td>
 			            	<!-- <span data-bind="text: $data"></span> -->
-			            	<span data-bind="visible: !$root.editMode(), text: data"></span>
-							<input data-bind="visible: $root.editMode, value: data, hasFocus: isSelected" />
+			            	<span data-bind="visible: !$root.editMode(), text: data, style:{fontWeight : bold() ? 'bold' : 'normal'}"></span>
+							<input class="jsTableCell" data-bind="visible: $root.editMode, value: data, style:{fontWeight : bold() ? 'bold' : 'normal'}" />
 			            </td>
 			        </tr>
 			    </tbody>

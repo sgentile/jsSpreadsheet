@@ -7,7 +7,7 @@ $.widget("ui.jsSpreadsheet", {
 					{name: "Column", width:"231px"}
 				],
 				rows: [					
-					[{data:""}]
+					[{data:"", metadata:{}}]
 				]
 		}
 	},
@@ -15,8 +15,20 @@ $.widget("ui.jsSpreadsheet", {
 	_create: function(){
 		var jsTableCell = function(rowItem){
 			this.data = ko.observable(rowItem.data);
+			
+			this.bold = ko.observable(false);
+			this.italic = ko.observable(false);
+			this.leftJustified = ko.observable(false);
+			this.rightJustified = ko.observable(false);
+			
+			if(rowItem.metadata){
+				if(rowItem.metadata.bold){
+					this.bold(rowItem.metadata.bold);
+				}
+			}
+			
+			
 		    this.editing = ko.observable(false);
-		         
 		    // Behaviors
 		    this.edit = function() { 
 		    	this.editing(true) 
@@ -41,6 +53,7 @@ $.widget("ui.jsSpreadsheet", {
 			self.rows = ko.observableArray([]);
 			
 			self.initialize = function(element){
+				self.element = element;
 				self.$colResizable = $(element).find('table').colResizable(
 					{
 						postbackSafe	: true, 
@@ -67,7 +80,7 @@ $.widget("ui.jsSpreadsheet", {
 			
 				ko.utils.arrayForEach(data.rows, function(tableRow){		
 					var rows = ko.utils.arrayMap(tableRow, function(item) {
-			        	return new jsTableCell(item);
+						return new jsTableCell(item);
 			    	});
 					
 					self.rows.push(ko.observableArray(rows));
@@ -129,6 +142,7 @@ $.widget("ui.jsSpreadsheet", {
 			self.toggleEdit = function(){
 				if(self.editMode()){
 					self.editMode(false);
+					$(self.element).find(".jsTableCellSelected").removeClass('jsTableCellSelected');
 				}
 				else{
 					self.editMode(true);
@@ -174,9 +188,38 @@ $.widget("ui.jsSpreadsheet", {
 				
 			};
 		};
+		
 		var table = new jsTable(this.options.data);
 		ko.applyBindingsToNode(this.element[0], {template:{name:'jsSpreadsheet-template'}}, table);
 		table.initialize(this.element);		
+		
+		var $element = $(this.element);
+		
+		$element.find(".jsTableCell").on('click', function(){
+			$element.find(".jsTableCellSelected").removeClass('jsTableCellSelected');
+			$(this).addClass("jsTableCellSelected");
+		});
+		
+		var getSelectedTableCell = function(){
+			var element = $element.find(".jsTableCellSelected");
+			if(element[0])
+			{
+				var tableCell = ko.dataFor(element[0]);
+				$element.find(".jsTableCellSelected").removeClass('jsTableCellSelected');
+				return tableCell;
+			}
+			return null;
+		};
+		
+		$(".jsTableCellMakeBold").on('click', function(){
+			var tableCell = getSelectedTableCell();
+			if(tableCell){
+				if(tableCell.bold())
+					tableCell.bold(false);
+				else
+					tableCell.bold(true);
+			}
+		});
 	}
 }); //end widget
 }(jQuery));
