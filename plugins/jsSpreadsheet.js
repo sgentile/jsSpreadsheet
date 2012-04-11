@@ -7,7 +7,7 @@ $.widget("ui.jsSpreadsheet", {
 					{name: "Column", width:"231px"}
 				],
 				rows: [					
-					[{data:"", metadata:{}}]
+					[{data:"", metadata:{fontWeight:'normal', fontStyle: 'normal', textAlign: 'left'}}]
 				]
 		}
 	},
@@ -112,7 +112,14 @@ $.widget("ui.jsSpreadsheet", {
 		    		}),
 		    		rows: ko.utils.arrayMap(self.rows(), function(item) {
 						return ko.utils.arrayMap(item(), function(cell){
-							return {value: cell.data()};
+							return  {
+								value		: cell.data(),
+								metadata	: {
+									fontWeight	: cell.fontWeight(),
+									fontStyle	: cell.fontStyle(),
+									textAlign	: cell.textAlign()
+								}
+							};
 						});
 		    		})
 				}
@@ -204,7 +211,7 @@ $.widget("ui.jsSpreadsheet", {
 		$(".jsTableCellMakeBold").on('click', function(){
 			var tableCell = getSelectedTableCell();
 			if(tableCell){
-				if(tableCell.fontWeight())
+				if(tableCell.fontWeight() === 'normal')
 					tableCell.fontWeight('bold');
 				else
 					tableCell.fontWeight('normal');
