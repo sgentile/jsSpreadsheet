@@ -140,7 +140,7 @@ $.widget("ui.jsSpreadsheet", {
 			self.toggleEdit = function(){
 				if(self.editMode()){
 					self.editMode(false);
-					$(self.element).find(".jsTableCellSelected").removeClass('jsTableCellSelected');
+					self.selectedTableCell(null);
 				}
 				else{
 					self.editMode(true);
