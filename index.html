@@ -34,14 +34,13 @@
 			<span data-bind="visible: editMode">
 				<button class="btn" data-bind="click: addColumn">Add Column</button>
 				<button class="btn" data-bind="click: addRow">Add Row</button>
-				<button class="btn jsTableCellMakeBold">Bold</button>
-				<button class="btn jsTableCellMakeItalic">Italics</button>
-				<button class="btn jsTableCellMakeTextAlignLeft">Align Left</button>
-				<button class="btn jsTableCellMakeTextAlignCenter">Align Center</button>
-				<button class="btn jsTableCellMakeTextAlignRight">Align Right</button>
+				<button class="btn" data-bind="click: makeBold">Bold</button>
+				<button class="btn" data-bind="click: makeItalic">Italics</button>
+				<button class="btn" data-bind="click: makeAlignLeft">Align Left</button>
+				<button class="btn" data-bind="click: makeAlignCenter">Align Center</button>
+				<button class="btn" data-bind="click: makeAlignRight">Align Right</button>
 			</span>	
-			<button class="btn" data-bind="click: showJson">Show Json</button>		
-			<table style="width:800px;" class="table table-bordered table-condensed">
+			<table style="width:100%;" class="table table-bordered table-condensed">
 			    <thead>
 			    	<tr data-bind="foreach: columns">
 			        	<th class="spreadsheetHeader" data-bind="attr: {width:width}">				        		
@@ -58,7 +57,7 @@
 			            <td>
 			            	<!-- <span data-bind="text: $data"></span> -->
 			            	<div data-bind="visible: !$root.editMode(), text: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}"></div>
-							<input class="jsTableCell" data-bind="visible: $root.editMode, value: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}" />
+							<input data-bind="click: $root.setSelectedTableCell, visible: $root.editMode, value: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}" />
 			            </td>
 			        </tr>
 			    </tbody>

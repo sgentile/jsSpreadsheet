@@ -58,6 +58,11 @@ $.widget("ui.jsSpreadsheet", {
 			self.isTextSelected = ko.observable(false);
 			self.columns = ko.observableArray([]);			
 			self.rows = ko.observableArray([]);
+			self.selectedTableCell = ko.observable(null);
+			
+			self.setSelectedTableCell = function(){
+				self.selectedTableCell(this);
+			}				
 			
 			self.initialize = function(element){
 				self.element = element;
@@ -124,11 +129,7 @@ $.widget("ui.jsSpreadsheet", {
 		    		})
 				}
 			}
-			
-			self.showJson = function(){
-				console.log(JSON.stringify(self.getData()));
-			}
-			
+
 			self.editModeText = ko.computed(function(){
 				if(self.editMode()){
 					return "End Edit"
@@ -181,73 +182,51 @@ $.widget("ui.jsSpreadsheet", {
 				}
 			};
 				
-			self.editCell = function (){
-				
+			self.makeBold = function(){
+					var jsTableCell = self.selectedTableCell();
+					if(jsTableCell){
+						if(jsTableCell.fontWeight() === 'normal')
+							jsTableCell.fontWeight('bold');
+						else
+							jsTableCell.fontWeight('normal');					
+					}
+			};
+			
+			self.makeItalic = function(){
+					var jsTableCell = self.selectedTableCell();
+					if(jsTableCell){
+						if(jsTableCell.fontStyle() === 'normal')
+							jsTableCell.fontStyle('italic');
+						else
+							jsTableCell.fontStyle('normal');					
+					}
+			};
+			
+			self.makeAlignLeft = function(){
+				var jsTableCell = self.selectedTableCell();
+				if(jsTableCell){
+					jsTableCell.textAlign('left');
+				}
+			};
+			
+			self.makeAlignCenter = function(){
+				var jsTableCell = self.selectedTableCell();
+				if(jsTableCell){
+					jsTableCell.textAlign('center');
+				}
+			};
+			
+			self.makeAlignRight = function(){
+				var jsTableCell = self.selectedTableCell();
+				if(jsTableCell){
+					jsTableCell.textAlign('right');
+				}
 			};
 		};
 		
 		var table = new jsTable(this.options.data);
 		ko.applyBindingsToNode(this.element[0], {template:{name:'jsSpreadsheet-template'}}, table);
-		table.initialize(this.element);		
-		
-		var $element = $(this.element);
-		
-		$element.find(".jsTableCell").on('click', function(){
-			$element.find(".jsTableCellSelected").removeClass('jsTableCellSelected');
-			$(this).addClass("jsTableCellSelected");
-		});
-		
-		var getSelectedTableCell = function(){
-			var element = $element.find(".jsTableCellSelected");
-			if(element[0])
-			{
-				var tableCell = ko.dataFor(element[0]);
-				//$element.find(".jsTableCellSelected").removeClass('jsTableCellSelected');
-				return tableCell;
-			}
-			return null;
-		};
-		
-		$(".jsTableCellMakeBold").on('click', function(){
-			var tableCell = getSelectedTableCell();
-			if(tableCell){
-				if(tableCell.fontWeight() === 'normal')
-					tableCell.fontWeight('bold');
-				else
-					tableCell.fontWeight('normal');
-			}
-		});
-		
-		$(".jsTableCellMakeItalic").on('click', function(){
-			var tableCell = getSelectedTableCell();
-			if(tableCell){
-				if(tableCell.fontStyle() === 'normal')
-					tableCell.fontStyle('italic');
-				else
-					tableCell.fontStyle('normal');
-			}
-		});
-		
-		$(".jsTableCellMakeTextAlignCenter").on('click', function(){
-			var tableCell = getSelectedTableCell();
-			if(tableCell){
-				tableCell.textAlign('center');
-			}
-		});
-		
-		$(".jsTableCellMakeTextAlignLeft").on('click', function(){
-			var tableCell = getSelectedTableCell();
-			if(tableCell){
-				tableCell.textAlign('left');
-			}
-		});
-		
-		$(".jsTableCellMakeTextAlignRight").on('click', function(){
-			var tableCell = getSelectedTableCell();
-			if(tableCell){
-				tableCell.textAlign('right');
-			}
-		});
+		table.initialize(this.element);
 	}
 }); //end widget
 }(jQuery));
