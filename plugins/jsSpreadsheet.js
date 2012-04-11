@@ -16,14 +16,21 @@ $.widget("ui.jsSpreadsheet", {
 		var jsTableCell = function(rowItem){
 			this.data = ko.observable(rowItem.data);
 			
-			this.bold = ko.observable(false);
-			this.italic = ko.observable(false);
-			this.leftJustified = ko.observable(false);
-			this.rightJustified = ko.observable(false);
+			//http://www.comptechdoc.org/independent/web/cgi/javamanual/javastyle.html
+			
+			this.fontWeight = ko.observable("normal");
+			this.fontStyle = ko.observable("normal");
+			this.textAlign = ko.observable("left");
 			
 			if(rowItem.metadata){
-				if(rowItem.metadata.bold){
-					this.bold(rowItem.metadata.bold);
+				if(rowItem.metadata.fontWeight){
+					this.fontWeight(rowItem.metadata.fontWeight);
+				}
+				if(rowItem.metadata.fontStyle){
+					this.fontStyle(rowItem.metadata.fontStyle);
+				}
+				if(rowItem.metadata.textAlign){
+					this.textAlign(rowItem.metadata.textAlign);
 				}
 			}
 			
@@ -87,23 +94,6 @@ $.widget("ui.jsSpreadsheet", {
 				});
 			}; // end initialize
 			
-			self.makeBold = function(){
-			
-			};
-			
-			self.makeItalic = function(){
-				
-			};
-			
-			self.makeLeftJustified = function(){
-				
-			};
-			
-			self.makeRightJustified = function(){
-				
-			};
-			
-					
 			self.setWidths = function(columns){
 				$.each(columns, function(index, value){
 					self.columns()[index].width($(value).width());
@@ -214,10 +204,41 @@ $.widget("ui.jsSpreadsheet", {
 		$(".jsTableCellMakeBold").on('click', function(){
 			var tableCell = getSelectedTableCell();
 			if(tableCell){
-				if(tableCell.bold())
-					tableCell.bold(false);
+				if(tableCell.fontWeight())
+					tableCell.fontWeight('bold');
 				else
-					tableCell.bold(true);
+					tableCell.fontWeight('normal');
+			}
+		});
+		
+		$(".jsTableCellMakeItalic").on('click', function(){
+			var tableCell = getSelectedTableCell();
+			if(tableCell){
+				if(tableCell.fontStyle() === 'normal')
+					tableCell.fontStyle('italic');
+				else
+					tableCell.fontStyle('normal');
+			}
+		});
+		
+		$(".jsTableCellMakeTextAlignCenter").on('click', function(){
+			var tableCell = getSelectedTableCell();
+			if(tableCell){
+				tableCell.textAlign('center');
+			}
+		});
+		
+		$(".jsTableCellMakeTextAlignLeft").on('click', function(){
+			var tableCell = getSelectedTableCell();
+			if(tableCell){
+				tableCell.textAlign('left');
+			}
+		});
+		
+		$(".jsTableCellMakeTextAlignRight").on('click', function(){
+			var tableCell = getSelectedTableCell();
+			if(tableCell){
+				tableCell.textAlign('right');
 			}
 		});
 	}

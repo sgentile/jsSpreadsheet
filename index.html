@@ -35,9 +35,10 @@
 				<button class="btn" data-bind="click: addColumn">Add Column</button>
 				<button class="btn" data-bind="click: addRow">Add Row</button>
 				<button class="btn jsTableCellMakeBold">Bold</button>
-				<button class="btn" data-bind="click: makeItalic">Italics</button>
-				<button class="btn" data-bind="click: makeLeftJustified">Left Justified</button>
-				<button class="btn" data-bind="click: makeRightJustified">Right Justified</button>
+				<button class="btn jsTableCellMakeItalic">Italics</button>
+				<button class="btn jsTableCellMakeTextAlignLeft">Align Left</button>
+				<button class="btn jsTableCellMakeTextAlignCenter">Align Center</button>
+				<button class="btn jsTableCellMakeTextAlignRight">Align Right</button>
 			</span>	
 			<button class="btn" data-bind="click: showJson">Show Json</button>		
 			<table style="width:600px;" class="table table-bordered table-condensed">
@@ -54,10 +55,10 @@
 			    </thead>
 			    <tbody data-bind="foreach: rows">
 			    	<tr data-bind="foreach: $data">
-			            <td>
+			            <td data-bind="style:{textAlign : textAlign()}">
 			            	<!-- <span data-bind="text: $data"></span> -->
-			            	<span data-bind="visible: !$root.editMode(), text: data, style:{fontWeight : bold() ? 'bold' : 'normal'}"></span>
-							<input class="jsTableCell" data-bind="visible: $root.editMode, value: data, style:{fontWeight : bold() ? 'bold' : 'normal'}" />
+			            	<span data-bind="visible: !$root.editMode(), text: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}"></span>
+							<input class="jsTableCell" data-bind="visible: $root.editMode, value: data, style:{fontWeight : fontWeight(), fontStyle : fontStyle(), textAlign : textAlign()}" />
 			            </td>
 			        </tr>
 			    </tbody>
